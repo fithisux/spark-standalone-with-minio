@@ -1,0 +1,63 @@
+version: "3.3"
+
+networks:
+  default:
+    external:
+      name: app-tier
+services:
+  minio:
+    image: 'bitnami/minio:latest'
+    container_name: my-minio-server
+    environment:
+      - MINIO_ROOT_USER=theroot
+      - MINIO_ROOT_PASSWORD=theroot123
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - ${PWD}/minio_data:/data
+  spark-master:
+    build: .
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
+    volumes:
+       - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+       - ./hadoop_conf/core-site.xml:/opt/spark/etc/hadoop/core-site.xml
+    environment:
+      - SPARK_WORKLOAD=master
+  spark-worker-a:
+    build: .
+    ports:
+      - "9091:8080"
+      - "7000:7000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"        
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKLOAD=worker
+    volumes:
+       - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+       - ./hadoop_conf/core-site.xml:/opt/spark/etc/hadoop/core-site.xml
+       - ./worker-a-code:/opt/spark/workdir
+  spark-worker-b:
+    build: .
+    ports:
+      - "9092:8080"
+      - "7001:7000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"        
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKLOAD=worker
+    volumes:
+        - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+        - ./hadoop_conf/core-site.xml:/opt/spark/etc/hadoop/core-site.xml
+        - ./worker-b-code:/opt/spark/workdir
+
