@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y curl vim wget software-properties-commo
 # Fix the value of PYTHONHASHSEED
 # Note: this is needed when you use Python 3.3 or greater
 ENV SPARK_VERSION=spark-3.3.0 \
-HADOOP_VERSION=hadoop-3.3.3 \
+HADOOP_VERSION=hadoop-3.3.4 \
 SPARK_HOME=/opt/spark \
 PYTHONHASHSEED=1
 
