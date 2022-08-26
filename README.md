@@ -1,19 +1,11 @@
-# Spark Cluster that uses mino for S3
-
-Was very hard work for me draw inspiration from bitnami docker images and minio. Use very latest versions and 3.10.xxx python yay.
 
 # General
 
-A simple spark standalone cluster for your testing environment purposses. A *docker-compose up* away from you solution for your spark development environment.
+This is an educational standalone Spark Cluster that uses mino for S3
 
-The Docker compose will create the following containers:
+It improves upon [Spark Cluster with Docker](https://github.com/mvillarrealb/docker-spark-cluster) with significant updates and enhancements for MinIO
 
-container|Exposed ports
----|---
-spark-master|9090 7077
-spark-worker-1|9091
-spark-worker-2|9092
-demo-database|5432
+You can always use information here [Minio in docker cluster is not reachable from spark container](https://stackoverflow.com/questions/72260705/minio-in-docker-cluster-is-not-reachable-from-spark-container) to spin one without the code here.
 
 # Installation
 
